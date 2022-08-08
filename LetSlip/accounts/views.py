@@ -26,3 +26,7 @@ def signup(request):
             auth.login(request, user)
             return render(request, 'login.html')
     return render(request, 'signup.html')
+
+def profile_view(request):
+    if request.method == 'GET':
+        return render(request, 'profile.html')

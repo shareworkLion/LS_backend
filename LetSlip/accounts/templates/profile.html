@@ -1,0 +1,20 @@
+<table>
+    <tr>
+        <td>아이디</td>
+        {% if user.level == '0'%}
+        <td>{{ user.user_id }}(개발자)</td>
+        {% elif user.level == '1' %}
+        <td>{{ user.user_id }}(관리자)</td>
+        {% else %}
+        <td>{{ user.user_id }}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td>닉네임</td>
+        <td>{{ user.nickname }}</td>
+    </tr>
+    <tr>
+        <td>이름</td>
+        <td>{{ user.name }}</td>
+    </tr>
+</table>
