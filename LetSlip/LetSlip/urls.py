@@ -11,5 +11,7 @@ urlpatterns = [
     path('login/', accounts_views.login, name='login'),
     path('logout/', accounts_views.logout, name='logout'),
     path('signup/', accounts_views.signup, name='signup'),
-    path('profile/', accounts_views.profile, name='profile')
+    path('profile/<int:pk>', accounts_views.profile, name='profile'),
+    path('profile_update/', accounts_views.profile_update, name='profile_update')
+    # url(r'^profile/(?P<pk>[0-9]+)/$', login_required(views.ProfileView.as_view()), name='profile'),
 ]

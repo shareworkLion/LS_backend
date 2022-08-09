@@ -1,22 +1,20 @@
-from django.contrib.auth.forms import UserChangeForm
+from dataclasses import field
 from django import forms
-from .models import User
+from LetSlip.accounts.models import User
+from .models import Profile
 
-class UserChangeForm(UserChangeForm):
-    password = None        
-    picture = forms.CharField(label='사진', widget=forms.TextInput(
-        attrs={'class': 'form-control',}), 
-    )        
-    gallery_name = forms.CharField(label='갤러리 이름', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'maxlength':'50', 'oninput':"maxLengthCheck(this)",}), 
-    )        
-    nickname = forms.CharField(label='닉네임', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'maxlength':'8', 'oninput':"maxLengthCheck(this)",}), 
-    )
-    motto = forms.CharField( label='한 줄 모토', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'maxlength':'100', 'oninput':"maxLengthCheck(this)",}), 
-    )
-    
+ # 유저 정보만 담는 폼
+class UserForm(forms.ModelForm):
+    nickname = forms.CharField(label='닉네임')
     class Meta:
         model = User
-        fields = ['picture', 'gallery_name', 'nickname', 'motto', 'user_id']
+        fields = ['nickname']
+
+# 본인 slip 페이지
+class ProfileForm(forms.ModelForm):
+    profile_photo = forms.ImageField(label='프로필 사진', required=False)
+    gallery_name = forms.CharField(label='갤러리 이름')
+    motto = forms.CharField(label='한 줄 모토')
+    class Meta:
+        model = Profile
+        fields = ['profile_photo', 'gallery_name', 'motto']
