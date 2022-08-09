@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
 from django.views import View
 from .forms import UserForm, ProfileForm 
+from .models import User, Profile
 
 def login(request):
     if request.method == "POST":
@@ -31,29 +32,44 @@ def signup(request):
     return render(request, 'signup.html')
 
 def profile(request):
-    if request.method == 'GET':
-        return render(request, 'profile.html')
-
-class ProfileView(DetailView):
-    context_object_name = 'profile_user' # model의 User모델에 대한 객체와 로그인한 사용자 명칭과 겹침을 해결
-    model = User
-    template_name = 'accounts/profile.html'
-
-class ProfileUpDateView(View):
-    def get(self, request):
-        user = get_object_or_404(User, pk=request.user.pk)
-        user_form = UserForm(initial={
-            'nickname':nickname,
-        })
-
-        if hasattr(user, 'profile'): # user가 profile 가지고 있으면 True
-            profile = user.profile
-            profile_form = ProfileForm(initial={
-                'profile_photo':profile_photo,
-                'gallery_name':gallery_name,
-                'motto':motto,
-            })
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            post = Profile()
+            post.nickname = form.cleaned_data['nickname']
+            post.profile_photo = form.cleaned_data['profile_photo']
+            post.gallery_name = form.cleaned_data['gallery_name']
+            post.motto = form.cleaned_data['motto']
+            post.save()
+            return redirect('profile.html')
         else:
-            profile_form = ProfileForm()
+            form = ProfileForm()
+        return render(request, 'profile.html', {'form':form})
 
-        return render(request, 'profile.html', {"user_form":user_form, "profile_form":profile_form})
+def profile_update(request):
+    if request.method == 'PUT':
+        return render(request, 'profile_update.html')
+
+# class ProfileView(DetailView):
+#     context_object_name = 'profile_user' # model의 User모델에 대한 객체와 로그인한 사용자 명칭과 겹침을 해결
+#     model = User
+#     template_name = 'accounts/profile.html'
+
+# class ProfileUpDateView(View):
+#     def get(self, request):
+#         user = get_object_or_404(User, pk=request.user.pk)
+#         user_form = UserForm(initial={
+#             'nickname':nickname,
+#         })
+
+#         if hasattr(user, 'profile'): # user가 profile 가지고 있으면 True
+#             profile = user.profile
+#             profile_form = ProfileForm(initial={
+#                 'profile_photo':profile_photo,
+#                 'gallery_name':gallery_name,
+#                 'motto':motto,
+#             })
+#         else:
+#             profile_form = ProfileForm()
+
+#         return render(request, 'profile.html', {"user_form":user_form, "profile_form":profile_form})
