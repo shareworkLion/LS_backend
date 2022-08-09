@@ -1,0 +1,30 @@
+<h1>생성한 글 확인</h1>
+
+<h2> 제목 </h2>
+{{ detail.title }}
+
+<h2> 날짜 </h2>
+{{ detail.date }}
+
+<h2> 본문 </h2>
+{{ detail.body }}
+
+{% if detail.photo %}
+<img src = "{{ detail.photo.url }}" alt="" height="200">
+{% endif %}
+
+<br>
+{{ tag.category }}
+<hr>
+
+<h3>댓글</h3>
+<form method="POST" action="{% url 'comment_new' detail.id %}">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type = "submit" value="댓글 입력">
+</form>
+{% for comment in detail.comment_set.all %}
+    <P>{{ comment }}</P>
+    <hr>
+{% endfor %}
+
