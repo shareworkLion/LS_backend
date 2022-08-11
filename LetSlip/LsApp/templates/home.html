@@ -1,4 +1,12 @@
 <h1>메인 홈화면입니다.</h1>
+<a href="{% url 'login' %}">로그인하기</a><br>
+<a href="{% url 'logout' %}">로그아웃하기</a>
+{% if user.is_authenticated %}
+안녕하세요, {{ user.username }}님!
+{% else %}
+아직 로그인이 되지 않았습니다
+{% endif %}
+<hr>
 
 <form  method="POST" action="{% url 'search' %}">
     {% csrf_token %}
@@ -9,7 +17,9 @@
 <a href="{% url 'post_new' %}">새 글 작성</a>
 <br>
 <hr>
-
+게시글 {{ posts.count }}개 
+<br>
+<hr>
 <tbody>
 {% for post in posts %}
 <tr>
@@ -17,7 +27,10 @@
     <img src = "{{ post.photo.url }}" alt="" height="200">
     {% endif %}
     <br>
-    <td>카테고리 : {{ post.category }}</td>
+    <td>날짜 : {{ post.date|date:'Y-m-d' }} / </td>
+	<td>작성자 : {{ post.author.username }}</td>
+    <br>
+    <td>카테고리 : {{ post.category }} / </td>
 	<td><a href = "{% url 'post_detail' post.id %}">제목 : {{ post.title }}</a></td><br>
     <hr>
 </tr>

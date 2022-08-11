@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
-from .forms import PostForm, CommentForm
+from .models import Post, Comment, Category, CommentReply
+from .forms import PostForm, CommentForm, CommentReplyForm
 from django.core.paginator import Paginator
 
 # 일단 이 부분을 본인 갤러리로 두고 구현했음
@@ -18,12 +18,15 @@ def post_new(request):
     if request.method == 'POST' or request.method == "FILES":
         form = PostForm(request.POST, request.FILES)       
         if form.is_valid():
-            post = Post()
-            post.title = form.cleaned_data['title']
-            post.body = form.cleaned_data['body']
-            post.author = form.cleaned_data['author']
-            post.category = form.cleaned_data['category']
-            form.save()
+            unfinished = form.save(commit=False)
+            unfinished.author = request.user            # user 추가!
+            unfinished.save()
+            # post = Post()
+            # post.title = form.cleaned_data['title']
+            # post.body = form.cleaned_data['body']
+            # post.author = form.cleaned_data['author']
+            # post.category = form.cleaned_data['category']
+            # form.save()
             return redirect('home')
     else:
         form = PostForm()
@@ -31,9 +34,10 @@ def post_new(request):
 
 # 갤러리 상세페이지
 def post_detail(request, post_id):
-    detail = get_object_or_404(Post, pk=post_id)
+    detail = get_object_or_404(Post, pk=post_id) 
     comment_form = CommentForm()
-    return render(request, 'post_detail.html', {'detail':detail}, {'comment_form':comment_form})
+    comment_reply_form = CommentReplyForm()
+    return render(request, 'post_detail.html', {'detail':detail, 'comment_form':comment_form, 'comment_reply_form':comment_reply_form})
 
 
 # 댓글 
@@ -42,8 +46,48 @@ def comment_new(request, post_id):
     if filled_form.is_valid():
         finished_form = filled_form.save(commit=False)
         finished_form.post = get_object_or_404(Post, pk=post_id)
+        finished_form.comment_name = request.user
         finished_form.save()
+        
     return redirect('post_detail', post_id)
+
+
+def commentreply(request, comment_id):
+    form = CommentReplyForm(request.POST)
+    if form.is_valid():
+        finished = form.save(commit=False)
+        finished.comment_reply = get_object_or_404(Comment, pk=comment_id)
+        finished.comment_reply_name = request.user
+        finished.save()
+        
+    return redirect('post_detail', post_id=finished.comment_reply.post.id)
+    
+    
+    # comment_reply = get_object_or_404(Comment, pk=comment_id)
+    # if request.method == "POST":
+    #     form = CommentReplyForm(request.POST)
+    #     if form.is_valid():
+    #         comment = form.save(commit=False)
+    #         comment.comment_reply = comment_reply
+    #         comment.comment_reply_name = request.user
+    #         comment.save()
+    #         return redirect('post_detail', post_id=comment.comment_reply.post.id)
+    # else:
+    #     form = CommentReplyForm()
+    # return render(request, 'post_detail.html', {'form': form})
+
+
+    
+    # form = CommentReplyForm(request.POST)
+    # if form.is_valid():
+    #     finished = form.save(commit=False)
+    #     finished.comment_reply = get_object_or_404(Comment, pk=comment_id)
+    #     finished.comment_reply_name = request.user
+    #     finished.save()
+        
+    # return redirect('post_detail', comment_id=finished.post.id)
+
+
 
 # 검색
 def search(request):
@@ -55,4 +99,3 @@ def search(request):
         else:
             return render(request, 'searched.html', {})
 
-    
