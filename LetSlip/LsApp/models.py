@@ -5,6 +5,77 @@ import re
 from django.utils import timezone
 
 
+class Board(models.Model):
+    b_no = models.AutoField(primary_key=True)
+    b_name = models.CharField(max_length=255)
+    b_img = models.CharField(max_length=255, blank=True, null=True)
+    regdate = models.DateTimeField()
+    b_intro1 = models.CharField(max_length=255)
+    b_intro2 = models.CharField(max_length=255)
+    b_intro3 = models.CharField(max_length=255)
+    suc_intro1 = models.CharField(max_length=255, blank=True, null=True)
+    suc_intro2 = models.CharField(max_length=255, blank=True, null=True)
+    suc_intro3 = models.CharField(max_length=255, blank=True, null=True)
+    open_yn = models.CharField(max_length=1, blank=True, null=True)
+    comment_yn = models.CharField(max_length=1, blank=True, null=True)
+    cheerup_yn = models.CharField(max_length=1, blank=True, null=True)
+    m_no = models.ForeignKey('Member', models.DO_NOTHING, db_column='m_no', blank=True, null=True)
+    k_no = models.ForeignKey('Keyword', models.DO_NOTHING, db_column='k_no', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'board'
+
+
+class Cheerup(models.Model):
+    m_no = models.ForeignKey('Member', models.DO_NOTHING, db_column='m_no', blank=True, null=True)
+    b_no = models.ForeignKey(Board, models.DO_NOTHING, db_column='b_no', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'cheerup'
+
+
+class Comment(models.Model):
+    c_no = models.AutoField(primary_key=True)
+    c_content = models.CharField(max_length=255)
+    c_regdate = models.DateTimeField()
+    org_c_no = models.IntegerField(blank=True, null=True)
+    m_no = models.ForeignKey('Member', models.DO_NOTHING, db_column='m_no', blank=True, null=True)
+    b_no = models.ForeignKey(Board, models.DO_NOTHING, db_column='b_no', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'comment'
+
+
+class Keyword(models.Model):
+    k_no = models.AutoField(primary_key=True)
+    k_name = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'keyword'
+
+
+class Member(models.Model):
+    m_no = models.AutoField(primary_key=True)
+    m_id = models.CharField(unique=True, max_length=255, blank=True, null=True)
+    pwd = models.CharField(max_length=255)
+    nick_nm = models.CharField(max_length=255)
+    galary_nm = models.CharField(max_length=255, blank=True, null=True)
+    motto = models.CharField(max_length=255, blank=True, null=True)
+    profile_img = models.CharField(max_length=255, blank=True, null=True)
+    mbti = models.CharField(max_length=255, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    lock_yn = models.CharField(max_length=1, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'member'
+
+
+
 category_select = (
     ('취업', '취업'),
     ('직장', '직장'),
