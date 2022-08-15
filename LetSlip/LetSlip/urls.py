@@ -2,16 +2,21 @@ from django.contrib import admin
 from django.urls import path
 from accounts import views as accounts_views
 from LsApp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
 
-    # accounts 앱
+    # LsApp
+    path('search/', views.search, name='search'),
+    path('post_new', views.post_new, name='post_new'),
+    path('post_detail/<int:post_id>', views.post_detail, name='post_detail'),
+    path('comment_new/<int:post_id>', views.comment_new, name='comment_new'),
+    path('commentreply/<int:comment_id>', views.commentreply, name='commentreply'),
+    # accounts
     path('login/', accounts_views.login, name='login'),
     path('logout/', accounts_views.logout, name='logout'),
     path('signup/', accounts_views.signup, name='signup'),
-    path('profile/<int:pk>', accounts_views.profile, name='profile'),
-    path('profile_update/', accounts_views.profile_update, name='profile_update')
-    # url(r'^profile/(?P<pk>[0-9]+)/$', login_required(views.ProfileView.as_view()), name='profile'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
