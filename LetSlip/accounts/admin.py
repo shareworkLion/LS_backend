@@ -1,7 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from .models import Profile
+
 
 # # 사용자 밑에 프로필 보여주기 위함
 # class ProfileInLine(admin.StackedInline):
@@ -12,4 +10,4 @@ from .models import Profile
 #     inlines = (ProfileInLine)
 
 
-admin.site.register(Profile)
+# admin.site.register(Profile)

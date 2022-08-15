@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'LsApp',
     'accounts',
     'django_extensions',
+    'feeling',
 ]
 
 MIDDLEWARE = [

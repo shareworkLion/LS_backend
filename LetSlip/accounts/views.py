@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.models import User
-from django.views.generic.detail import DetailView
-from django.views import View
-from .forms import UserForm, ProfileForm 
-from .models import User, Profile
+
 
 def login(request):
     if request.method == "POST":
@@ -31,24 +28,24 @@ def signup(request):
             return render(request, 'login.html')
     return render(request, 'signup.html')
 
-def profile(request):
-    if request.method == 'POST':
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            post = Profile()
-            post.nickname = form.cleaned_data['nickname']
-            post.profile_photo = form.cleaned_data['profile_photo']
-            post.gallery_name = form.cleaned_data['gallery_name']
-            post.motto = form.cleaned_data['motto']
-            post.save()
-            return redirect('profile.html')
-        else:
-            form = ProfileForm()
-        return render(request, 'profile.html', {'form':form})
+# def profile(request):
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST)
+#         if form.is_valid():
+#             post = Profile()
+#             post.nickname = form.cleaned_data['nickname']
+#             post.profile_photo = form.cleaned_data['profile_photo']
+#             post.gallery_name = form.cleaned_data['gallery_name']
+#             post.motto = form.cleaned_data['motto']
+#             post.save()
+#             return redirect('profile.html')
+#         else:
+#             form = ProfileForm()
+#         return render(request, 'profile.html', {'form':form})
 
-def profile_update(request):
-    if request.method == 'PUT':
-        return render(request, 'profile_update.html')
+# def profile_update(request):
+#     if request.method == 'PUT':
+#         return render(request, 'profile_update.html')
 
 # class ProfileView(DetailView):
 #     context_object_name = 'profile_user' # model의 User모델에 대한 객체와 로그인한 사용자 명칭과 겹침을 해결

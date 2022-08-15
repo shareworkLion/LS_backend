@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from accounts import views as accounts_views
 from LsApp import views
+from feeling import views as feeling_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -19,4 +20,7 @@ urlpatterns = [
     path('login/', accounts_views.login, name='login'),
     path('logout/', accounts_views.logout, name='logout'),
     path('signup/', accounts_views.signup, name='signup'),
+
+    # feeling
+    path('feelpost/', feeling_views.feelpost, name='feelpost'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
