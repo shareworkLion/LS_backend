@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.models import User
+from .models import FollowUser
 
 
 def login(request):
@@ -27,6 +28,11 @@ def signup(request):
             auth.login(request, user)
             return render(request, 'login.html')
     return render(request, 'signup.html')
+
+# 팔로우 기능
+def follow(request, likes_user):
+    if request.user.is_authenticated:
+        person = get_object_or_404(get_user_model())
 
 # def profile(request):
 #     if request.method == 'POST':

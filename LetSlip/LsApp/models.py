@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 import re
 from django.utils import timezone
@@ -109,7 +110,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True) 
     photo = models.ImageField(blank=True, null=True, upload_to='post_photo')
     category = models.CharField(max_length=20, choices=category_select)
-    likes_user = models.ManyToManyField(User, related_name='likes_user')
+    likes_user = models.ManyToManyField(User, related_name='likes_user') # 응원 기능 위한 변수
     
     class Meta:
         ordering = ['-date']
