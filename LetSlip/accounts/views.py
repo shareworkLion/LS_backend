@@ -29,10 +29,10 @@ def signup(request):
             return render(request, 'login.html')
     return render(request, 'signup.html')
 
-# 팔로우 기능
-def follow(request, likes_user):
-    if request.user.is_authenticated:
-        person = get_object_or_404(get_user_model())
+# # 팔로우 기능
+# def follow(request, likes_user):
+#     if request.user.is_authenticated:
+#         person = get_object_or_404(get_user_model())
 
 # def profile(request):
 #     if request.method == 'POST':

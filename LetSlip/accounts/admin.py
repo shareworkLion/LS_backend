@@ -1,8 +1,7 @@
 from django.contrib import admin
+# from .models import FollowUser
 
-from .models import FollowUser
-
-admin.site.register(FollowUser)
+# admin.site.register(FollowUser)
 
 # # 사용자 밑에 프로필 보여주기 위함
 # class ProfileInLine(admin.StackedInline):
