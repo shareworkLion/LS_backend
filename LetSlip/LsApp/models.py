@@ -109,12 +109,16 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True) 
     photo = models.ImageField(blank=True, null=True, upload_to='post_photo')
     category = models.CharField(max_length=20, choices=category_select)
+    likes_user = models.ManyToManyField(User, related_name='likes_user')
     
     class Meta:
         ordering = ['-date']
         
     def __str__(self):
         return self.body
+
+    def count_likes_user(self):
+        return self.likes_user.count()
          
 class Comment(models.Model):
     comment_name = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -133,3 +137,15 @@ class CommentReply(models.Model):
 
     def __str__(self):
         return self.content
+
+# def like_count(self):
+#         return self.like_set.count()
+
+# class Like(models.Model):
+#     body = models.ForeignKey(Post, on_delete=models.CASCADE)
+#     author = models.ForeignKey(User, on_delete=models.CASCADE)
+#     create_dt = models.DateTimeField("CREATE DATE", auto_now_add=True, null=True)
+         
+#     class Meta:
+#         unique_together = (("post", "user"),)
+#         ordering = ['-create_dt']

@@ -60,3 +60,15 @@
 {% else %}
 <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
 {% endif %}
+
+<!-- 게시글 응원 -->
+<div>
+    <form action="{% url 'likes' likes_user %}" method='POST'>
+        {% csrf_token %}
+        {% if user in post.like_users.all %}
+            <input type="submit" value='응원해요 취소'>
+        {% else %}
+            <input type="submit" value='응원해요'>
+        {% endif %}
+    </form>
+</div>

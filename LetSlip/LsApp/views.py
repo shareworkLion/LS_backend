@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Comment, Category, CommentReply
 from .forms import PostForm, CommentForm, CommentReplyForm
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User
 
 # 일단 이 부분을 본인 갤러리로 두고 구현했음
 def home(request):
@@ -61,7 +62,7 @@ def commentreply(request, comment_id):
         finished.save()
         
     return redirect('post_detail', post_id=finished.comment_reply.post.id)
-    
+
     
     # comment_reply = get_object_or_404(Comment, pk=comment_id)
     # if request.method == "POST":
@@ -99,3 +100,14 @@ def search(request):
         else:
             return render(request, 'searched.html', {})
 
+# 게시글 좋아요 기능
+def likes_user(request, likes_user):
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, pk=likes_user)
+
+        if post.like_users.filter(pk=request.user.pk).exists():
+            post.like_users.remove(request.user)
+        else:
+            post.like_users.add(request.user)
+        return redirect('home')
+    return redirect('login')

@@ -1,5 +1,5 @@
 from pathlib import Path
-from .my_settings import mySECRET_KEY
+from .my_settings import mySECRET_KEY, myDATABASES
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'LsApp',
     'accounts',
     'django_extensions',
-    'feeling',
 ]
 
 MIDDLEWARE = [
@@ -66,16 +65,7 @@ WSGI_APPLICATION = 'LetSlip.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'letsslipdb',
-        'USER': 'letsslip',
-        'PASSWORD': 'LetsSlip1234!',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
-    }
-}
+DATABASES = myDATABASES
 
 
 # Password validation
@@ -124,4 +114,4 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODEL = 'accounts.User'
+#AUTH_USER_MODEL = 'LsApp.Member'
