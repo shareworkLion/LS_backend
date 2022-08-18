@@ -38,11 +38,11 @@
 {% endfor %}
 </tbody>
 
-
+<!-- 오류 발생
 <form method="POST" action="{% url 'post_like_toggle' post.like_count %}">
     {% csrf_token %}
     <p>응원 수 : {{post.like_count}}</p>
-    <!--<a href="{% url 'post_like_toggle' post.like_count %}">-->
+    
         {% if post in profile.like_post.all %}
             취소
         {% else %}
@@ -50,6 +50,8 @@
         {% endif %}
     </a>
 </form>
+-->
+<!--<a href="{% url 'post_like_toggle' post.like_count %}">-->
 
 <!-- 이전페이지 -->
 {% if posts.has_previous %}
