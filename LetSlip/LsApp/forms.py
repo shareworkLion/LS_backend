@@ -52,5 +52,3 @@ class CommentReplyForm(forms.ModelForm):
     class Meta:
         model = CommentReply
         fields = ['content']
-
-        

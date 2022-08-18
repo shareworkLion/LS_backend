@@ -102,7 +102,14 @@ class Category(models.Model):
     def __str__(self):
         return self.category_content
 
-   
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    like_post = models.ManyToManyField('Post', blank=True, related_name='like_users')
+
+    def __str__(self):
+        return str(self.user)
+
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -110,7 +117,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True) 
     photo = models.ImageField(blank=True, null=True, upload_to='post_photo')
     category = models.CharField(max_length=20, choices=category_select)
-    likes_user = models.ManyToManyField(User, related_name='likes_user') # 응원 기능 위한 변수
+    like_count = models.PositiveIntegerField(default=0) # 응원 기능 위한 변수
     
     class Meta:
         ordering = ['-date']
@@ -118,17 +125,18 @@ class Post(models.Model):
     def __str__(self):
         return self.body
 
-    def count_likes_user(self):
-        return self.likes_user.count()
-         
-class Comment(models.Model):
-    comment_name = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    # def like_count(self):
+    #     return self.like_set.count()
+
+# 오류 발생으로 주석 처리함.
+# class Comment(models.Model):
+#     comment_name = models.ForeignKey(User, on_delete=models.CASCADE)
+#     comment = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
     
-    def __str__(self):
-        return self.comment
+#     def __str__(self):
+#         return self.comment
     
 class CommentReply(models.Model):
     comment_reply = models.ForeignKey(Comment, on_delete=models.CASCADE)

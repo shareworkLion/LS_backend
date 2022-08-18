@@ -38,6 +38,19 @@
 {% endfor %}
 </tbody>
 
+
+<form method="POST" action="{% url 'post_like_toggle' post.like_count %}">
+    {% csrf_token %}
+    <p>응원 수 : {{post.like_count}}</p>
+    <!--<a href="{% url 'post_like_toggle' post.like_count %}">-->
+        {% if post in profile.like_post.all %}
+            취소
+        {% else %}
+            좋아요
+        {% endif %}
+    </a>
+</form>
+
 <!-- 이전페이지 -->
 {% if posts.has_previous %}
 <a href = "?page={{posts.previous_page_number}}">이전</a>
@@ -61,7 +74,7 @@
 <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
 {% endif %}
 
-<!-- 게시글 응원 -->
+<!-- 게시글 응원
 <div>
     <form action="{% url 'likes' likes_user %}" method='POST'>
         {% csrf_token %}
@@ -71,4 +84,4 @@
             <input type="submit" value='응원해요'>
         {% endif %}
     </form>
-</div>
+</div>>-->

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Comment, Category, CommentReply
+from .models import Post, Comment, Category, CommentReply, Profile
 from .forms import PostForm, CommentForm, CommentReplyForm
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 # 일단 이 부분을 본인 갤러리로 두고 구현했음
 def home(request):
@@ -41,7 +42,7 @@ def post_detail(request, post_id):
     return render(request, 'post_detail.html', {'detail':detail, 'comment_form':comment_form, 'comment_reply_form':comment_reply_form})
 
 
-# 댓글 
+# 댓글
 def comment_new(request, post_id):
     filled_form = CommentForm(request.POST)
     if filled_form.is_valid():
@@ -100,14 +101,42 @@ def search(request):
         else:
             return render(request, 'searched.html', {})
 
-# 게시글 좋아요 기능
-def likes_user(request, likes_user):
-    if request.user.is_authenticated:
-        post = get_object_or_404(Post, pk=likes_user)
+# def detail(request, post_id):
+#     context = dict()
+#     my_post = get_object_or_404(Post, pk=post_id)
 
-        if post.like_users.filter(pk=request.user.pk).exists():
-            post.like_users.remove(request.user)
-        else:
-            post.like_users.add(request.user)
-        return redirect('home')
-    return redirect('login')
+#     context['my_post'] = my_post
+
+#     return render(request, 'detail.html', context)
+
+# 게시글 좋아요 기능
+@login_required
+def post_like_toggle(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    try:
+        check_like = profile.like_post.get(id=post_id)
+        profile.like_post.remove(post)
+        post.like_count -= 1
+        post.save()
+    except:
+        profile.like_post.add(post)
+        post.like_count += 1
+        post.save()
+
+    return redirect('home.html', post_id)
+
+
+# def likes(request, likes_id):
+#     likes_count = PostForm(request.POST)
+#     if request.user.is_authenticated:
+#         post = get_object_or_404(Post, pk=likes_id)
+
+#         if post.likes.filter(pk=request.user.pk).exists():
+#             post.likes.remove(request.user)
+#         else:
+#             post.likes.add(request.user)
+#         return redirect('home', likes_id)
+#     return redirect('login')

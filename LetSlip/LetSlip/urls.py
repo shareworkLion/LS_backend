@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from accounts import views as accounts_views
 from LsApp import views
 from django.conf import settings
@@ -15,7 +15,7 @@ urlpatterns = [
     path('post_detail/<int:post_id>', views.post_detail, name='post_detail'),
     path('comment_new/<int:post_id>', views.comment_new, name='comment_new'),
     path('commentreply/<int:comment_id>', views.commentreply, name='commentreply'),
-    path('likes/<int:likes_user>', views.likes_user, name='likes_user'),
+    path('post_like_toggle/<int:post_id>', views.post_like_toggle, name='post_like_toggle'),
     
     # accounts
     path('login/', accounts_views.login, name='login'),
