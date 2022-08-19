@@ -2,6 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Comment, Category, CommentReply
 from .forms import PostForm, CommentForm, CommentReplyForm
 from django.core.paginator import Paginator
+from datetime import datetime 
+from django.utils.dateformat import DateFormat
+from django.shortcuts import render
+from .models import Post
+from django.http import HttpResponse
+
+
+
+
+
 
 # 일단 이 부분을 본인 갤러리로 두고 구현했음
 def home(request):
@@ -99,3 +109,22 @@ def search(request):
         else:
             return render(request, 'searched.html', {})
 
+# 오늘 올라온 게시물의 수
+def timesave(request):
+    if request.method == 'POST':
+        timesave = timesave()
+        timesave.save_date = request.POST.get('time')
+        timesave.date = DateFormat(datetime.now()).format('Ymd')
+        timesave.save()
+        return HttpResponse(content_type='appliction/json')
+
+def count_content_view(request, today):
+    today = DateFormat(datetime.now()).format('Ymd')
+    content = Post.objects.order_by('created')
+    content_count = content.exclude(deleted = True).filter(date = today).count()
+    context = {
+        'newcontent' : content,
+        'content_count' : content_count,
+    }
+    
+    return render(request, context=context)
